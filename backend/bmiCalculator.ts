@@ -20,29 +20,27 @@ const calculateBmi = (height: number, weight: number): Result => {
 	const bmi = weight / Math.pow(height / 100, 2)
 	switch (true) {
 		case bmi < 16: return 'Underweight (Severe thinness)';
-		case (bmi >= 16 && bmi <= 16.9): return 'Underweight (Severe thinness)';
-		case (bmi >= 16 && bmi <= 16.9): return 'Underweight (Moderate thinness)';
-		case (bmi >= 17 && bmi <= 18.4): return 'Underweight (Mild thinness)';
-		case (bmi >= 18.4 && bmi <= 24.9): return 'Normal (healthy weight)';
-		case (bmi >= 25 && bmi <= 29.9): return 'Overweight (Pre-obese)';
-		case (bmi >= 30 && bmi <= 34.9): return 'Obese (Class I)';
-		case (bmi >= 35 && bmi <= 39.9): return 'Obese (Class II)';
+		case (bmi >= 16 && bmi < 17): return 'Underweight (Moderate thinness)';
+		case (bmi >= 17 && bmi < 18.4): return 'Underweight (Mild thinness)';
+		case (bmi >= 18.4 && bmi < 25): return 'Normal (healthy weight)';
+		case (bmi >= 25 && bmi < 30): return 'Overweight (Pre-obese)';
+		case (bmi >= 30 && bmi < 35): return 'Obese (Class I)';
+		case (bmi >= 35 && bmi < 40): return 'Obese (Class II)';
 		case (bmi > 40): return 'Obese (Class III)';
 		default:
 			throw new Error('Height and weight values invalid.')
 	}
-
 }
 
 try {
-	const { height, weight } = parseArguments(process.argv)
-	console.log(calculateBmi(height, weight))
+	const { height, weight } = parseArguments(process.argv);
+	console.log(calculateBmi(height, weight));
 } catch (e) {
-	let errorMessage = 'An error occured.'
+	let errorMessage = 'An error occured.';
 	if (e instanceof Error) {
 		errorMessage += ' Error: ' + e.message
 	}
-	console.log(errorMessage)
+	console.log(errorMessage);
 }
 
-export { }
+export { calculateBmi }

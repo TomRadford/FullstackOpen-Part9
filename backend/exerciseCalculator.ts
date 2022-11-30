@@ -14,10 +14,10 @@ const parseArguments = (args: Array<string>): InputValues => {
 
 	args.slice(3).map((arg, i) => {
 		if (isNaN(Number(arg))) {
-			throw new Error(`${arg} is not a number`)
+			throw new Error(`${arg} is not a number`);
 		} else {
 			if (i !== args.length - 2) {
-				output.days = [...output.days, Number(arg)]
+				output.days = [...output.days, Number(arg)];
 			}
 		}
 	})
@@ -50,14 +50,14 @@ const calculateExercises = (days: Array<number>, target: number): ExerciseResult
 }
 
 try {
-	const { days, target } = parseArguments(process.argv)
-	console.log(calculateExercises(days, target))
+	const { days, target } = parseArguments(process.argv);
+	console.log(calculateExercises(days, target));
 } catch (e) {
-	let errorMessage: string = 'Something bad happened.'
+	let errorMessage: string = 'Something bad happened.';
 	if (e instanceof Error) {
-		errorMessage += ' ' + e.message
+		errorMessage += ' ' + e.message;
 	}
-	console.log(errorMessage)
+	console.log(errorMessage);
 }
 
 //Tell TS that this is module scope 
