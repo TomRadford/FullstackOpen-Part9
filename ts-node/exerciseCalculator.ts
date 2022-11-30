@@ -28,7 +28,7 @@ interface ExerciseResults {
 	periodLength: number,
 	trainingDays: number,
 	success: boolean,
-	rating: number,
+	rating: 1 | 2 | 3,
 	ratingDescription: String,
 	target: number,
 	average: number
