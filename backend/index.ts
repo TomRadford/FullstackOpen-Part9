@@ -1,11 +1,11 @@
 import express from "express";
 import { calculateBmi } from "./bmiCalculator";
-import bodyParser from "body-parser";
+
 import { calculateExercises } from "./exerciseCalculator";
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.get("/hello", (_req, res) => {
   res.send("Hello Full Stack!");
