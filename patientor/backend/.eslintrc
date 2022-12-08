@@ -11,6 +11,7 @@
 	  "node": true
 	},
 	"rules": {
+		"semi": 1,
 		"@typescript-eslint/quotes": [
 			"error",
 			"single",
@@ -31,6 +32,6 @@
 	},
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
-	  "project": "./patientor/backend/tsconfig.json"
+	  "project": "./tsconfig.json"
 	}
   }
