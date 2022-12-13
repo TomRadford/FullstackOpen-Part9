@@ -7,6 +7,15 @@ const router = express.Router();
 router.get('/', (_req, res) => {  
   res.json(patientsService.getNonSensitivePatients());});
 
+router.get('/:id', (req, res) => {
+  const {id} = req.params;
+  const patient = patientsService.getPatient(id);
+  if (typeof patient === 'undefined') {
+    return res.sendStatus(404);
+  }
+  return res.json(patient);
+});
+
 router.post('/', (req, res) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument

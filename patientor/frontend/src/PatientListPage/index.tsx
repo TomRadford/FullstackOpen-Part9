@@ -11,16 +11,33 @@ import { useStateValue } from "../state";
 import { TableCell } from "@material-ui/core";
 import { TableRow } from "@material-ui/core";
 import { TableBody } from "@material-ui/core";
+import { Link } from "react-router-dom";
+
+
+
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
-
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>();
+  const [error, setError] = React.useState<string | undefined>();
 
+  React.useEffect(() => {
+    void axios.get<void>(`${apiBaseUrl}/ping`);
+
+    const fetchPatientList = async () => {
+      try {
+        const { data: patientListFromApi } = await axios.get<Patient[]>(`${apiBaseUrl}/patients`);
+        dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    void fetchPatientList();
+  }, [dispatch]);
+  
   const openModal = (): void => setModalOpen(true);
 
-  const closeModal = (): void => {
+  const closeModal = (): void => { 
     setModalOpen(false);
     setError(undefined);
   };
@@ -43,7 +60,6 @@ const PatientListPage = () => {
       }
     }
   };
-
   return (
     <div className="App">
       <Box>
@@ -63,7 +79,7 @@ const PatientListPage = () => {
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
+              <TableCell><Link to={`/patients/${patient.id}`}>{patient.name}</Link></TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>

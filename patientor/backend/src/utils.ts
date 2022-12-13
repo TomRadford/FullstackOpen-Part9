@@ -15,6 +15,11 @@ const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// const isEntry = (param: any): param is Entry => {
+//   return (Array.isArray(param));
+// };
+
 //parsers
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseName = (name: any): string => {
@@ -53,12 +58,23 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
+// const parseEntries = (entries: unknown): Entry[] => {
+//   if (!isEntry(entries)) {
+//     throw new Error('Incorrect or missing array');
+//   }
+//   if (!entries) {
+//     return [];
+//   }
+//   return entries;
+// };
+
 type Fields = {
 name: unknown,
 dateOfBirth: unknown,
 ssn: unknown,
 gender: unknown,
-occupation: unknown
+occupation: unknown,
+entries?: unknown
 }
 //params could also be any here instead of fields
 export const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation}:Fields): NewPatient => {
@@ -67,7 +83,8 @@ export const toNewPatient = ({name, dateOfBirth, ssn, gender, occupation}:Fields
     dateOfBirth: parseDateOfBirth(dateOfBirth),
     ssn: parseSSN(ssn),
     gender: parseGender(gender),
-    occupation: parseOccupation(occupation)
+    occupation: parseOccupation(occupation),
+    entries: []
   };
 };
 

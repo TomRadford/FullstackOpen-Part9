@@ -41,6 +41,7 @@ const data = [
       'ssn': '090471-8890',
       'gender': 'male',
       'occupation': 'Digital evangelist'
+ 
   }
 ];
 
