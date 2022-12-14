@@ -9,23 +9,23 @@ import { useEffect, useState } from "react";
 // import { useStateValue } from "../state";
 import {useParams } from "react-router-dom";
 import { apiBaseUrl } from "../constants";
-import { useStateValue } from "../state";
+import { getPatientDetails, useStateValue } from "../state";
 import { Patient } from "../types";
 import { isString } from "../utils";
 
 const PatientInfoPage = () => {
   const {id} = useParams<{id: string}>();
-  const [{patients}, dispatch] = useStateValue();
+  const [{patientDetails}, dispatch] = useStateValue();
   const [error, setError] = useState<string | undefined>(undefined);
-  console.log(patients);
+  console.log(patientDetails);
   useEffect(() => {
     const fetchPatient = async () => {
     if (isString(id)) {
-      if (!Object.keys(patients).find(patientId => patientId === id)) {
-        console.log('Loading patient into state');
+      if (!Object.keys(patientDetails).find(patientId => patientId === id)) {
+        console.log('Loading new patient into patientDetails state');
         try {
           const {data: requestedPatient } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`); 
-          dispatch({type: "UPDATE_PATIENT", payload: requestedPatient});
+          dispatch(getPatientDetails(requestedPatient));
         } catch (e: unknown) {
           if (axios.isAxiosError(e)) {
             console.error(e?.response?.data || "Unrecgonized axios error");
@@ -48,9 +48,9 @@ if (error) {
 }
 
 
-if (isString(id) && patients[id]) {
+if (isString(id) && patientDetails[id]) {
   const getGender = ():string => {
-    switch (patients[id].gender) {
+    switch (patientDetails[id].gender) {
       case "male": 
        return '♂';
       case 'female':
@@ -61,12 +61,12 @@ if (isString(id) && patients[id]) {
   };
   return (
     <div>
-    <Typography variant="h5">{patients[id].name} {getGender()}</Typography>
+    <Typography variant="h5">{patientDetails[id].name} {getGender()}</Typography>
     {
-     patients[id].ssn ? 
-     <p>ssn: {patients[id].ssn}</p> : null
+     patientDetails[id].ssn ? 
+     <p>ssn: {patientDetails[id].ssn}</p> : null
     }
-    <p>occupation: {patients[id].occupation}</p>
+    <p>occupation: {patientDetails[id].occupation}</p>
   
 </div>
   );
