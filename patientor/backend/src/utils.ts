@@ -10,6 +10,7 @@ const isString = (text: unknown): text is string => {
   return (typeof text === 'string' || text instanceof String);
 };
 
+
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
@@ -142,21 +143,21 @@ const isDischarge = (discharge: any): discharge is Discharge => {
 
 const parseDescription = (description: unknown): string => {
   if (!description || !isString(description)) {
-    throw new Error('Description Missing');
+    throw new Error('Description Missing or malformatted');
   }
   return description;
 };
 
 const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
-    throw new Error('Date missing');
+    throw new Error('Date missing or malformatted');
   }
   return date;
 };
 
 const parseSpecialist = (specialist: unknown): string => {
   if (!specialist || !isString(specialist)) {
-    throw new Error('Specialist missing');
+    throw new Error('Specialist missing or malformatted');
   }
   return specialist;
 };
@@ -169,7 +170,7 @@ const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<Diagnosis['code']> 
 };
 
 const parseHealthCheckRating = (healthCheckRating: unknown): HealthCheckRating => {
-  if (!healthCheckRating || !isHealthCheckRating(healthCheckRating)) {
+  if (!isHealthCheckRating(healthCheckRating)) {
     throw new Error('Incorrect or missing health check rating');
   }
   return healthCheckRating;
@@ -254,7 +255,7 @@ export const toNewEntry = ({ type, description, date, specialist, diagnosisCodes
       };
     }
     default: {
-      throw new Error('Health check type incorrect');
+      throw new Error('Check type incorrect');
     }
   }
 };

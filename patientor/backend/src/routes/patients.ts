@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
     if (e instanceof Error) {
       errorMessage += e.message;
     }
-    res.status(400).send(errorMessage);
+    res.status(400).send({ error: errorMessage });
   }
 });
 
@@ -44,7 +44,7 @@ router.post('/:id/entries', (req, res) => {
     if (e instanceof Error) {
       errorMessage += e.message;
     }
-    res.status(400).send(errorMessage);
+    res.status(400).send({ error: errorMessage });
   }
 });
 
