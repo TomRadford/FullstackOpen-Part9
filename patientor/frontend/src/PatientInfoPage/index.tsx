@@ -1,10 +1,11 @@
-import { Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import AddEntryModal from "../AddEntryModal";
 import { apiBaseUrl } from "../constants";
-import { getPatientDetails, useStateValue } from "../state";
-import { Patient } from "../types";
+import { addPatientEntry, getPatientDetails, useStateValue } from "../state";
+import { Entry, NewEntry, Patient } from "../types";
 import { isString } from "../utils";
 import EntryDetails from "./EntryDetails";
 
@@ -12,6 +13,7 @@ const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patientDetails }, dispatch] = useStateValue();
   const [error, setError] = useState<string | undefined>(undefined);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   console.log(patientDetails);
   useEffect(() => {
     const fetchPatient = async () => {
@@ -35,6 +37,29 @@ const PatientInfoPage = () => {
     };
     void fetchPatient();
   }, []);
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: NewEntry) => {
+    try {
+      const { data: newEntry } = await axios.post<Entry>(`${apiBaseUrl}/patients/${String(id)}/entries`, values);
+      dispatch(addPatientEntry({ entry: newEntry, patientId: String(id) }));
+      closeModal();
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || "Unreccognised axios error");
+        setError(String(e?.response?.data?.error) || "Unrecognised axios error");
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
 
   if (error) {
     return (
@@ -76,6 +101,15 @@ const PatientInfoPage = () => {
             <EntryDetails key={entry.id} entry={entry} />);
         }
         )}
+        <AddEntryModal
+          modalOpen={modalOpen}
+          onSubmit={submitNewEntry}
+          error={error}
+          onClose={closeModal}
+        />
+        <Button variant="contained" onClick={() => openModal()}>
+          New Entry
+        </Button>
       </div>
     );
   }
