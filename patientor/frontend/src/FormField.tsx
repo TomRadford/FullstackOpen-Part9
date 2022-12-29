@@ -7,7 +7,7 @@ import {
   TextField as TextFieldMUI,
   Typography,
 } from "@material-ui/core";
-import { Diagnosis, Gender } from "../types";
+import { Diagnosis, Gender } from "./types";
 import { InputLabel } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 
@@ -18,15 +18,25 @@ export type GenderOption = {
 };
 
 // props for select field component
-type SelectFieldProps = {
+type GenderSelectFieldProps = {
   name: string;
   label: string;
   options: GenderOption[];
 };
+type TypeSelectFieldProps = {
+  name: string;
+  label: string;
+  options: string[];
+};
+type HealthCheckRatingProps = {
+  name: string;
+  label: string;
+  options: string[];
+};
 
 const FormikSelect = ({ field, ...props }: FieldProps) => <Select {...field} {...props} />;
 
-export const SelectField = ({ name, label, options }: SelectFieldProps) => (
+export const GenderSelectField = ({ name, label, options }: GenderSelectFieldProps) => (
   <>
     <InputLabel>{label}</InputLabel>
     <Field
@@ -44,6 +54,48 @@ export const SelectField = ({ name, label, options }: SelectFieldProps) => (
     </Field>
   </>
 );
+
+export const TypeSelectField = ({ name, label, options }: TypeSelectFieldProps) => (
+  <>
+    <InputLabel>{label}</InputLabel>
+    <Field
+      fullWidth
+      style={{ marginBottom: "0.5em" }}
+      label={label}
+      component={FormikSelect}
+      name={name}
+    >
+      {options.map(option => (
+        <MenuItem key={option} value={option}>
+          {option}
+        </MenuItem>
+      ))}
+    </Field>
+  </>
+);
+
+
+
+export const HealthCheckRatingField = ({ name, label, options }: HealthCheckRatingProps) => {
+  return (
+    <>
+      <InputLabel>{label}</InputLabel>
+      <Field
+        fullWidth
+        style={{ marginBottom: "0.5em" }}
+        label={label}
+        component={FormikSelect}
+        name={name}
+      >
+        {options.map(option =>
+          <MenuItem key={option} value={options.indexOf(option)}>
+            {option}
+          </MenuItem>
+        )}
+      </Field>
+    </>);
+}
+  ;
 
 interface TextProps extends FieldProps {
   label: string;
@@ -114,7 +166,7 @@ export const DiagnosisSelection = ({
   const onChange = (data: string[]) => {
     setDiagnoses([...data]);
     setFieldTouched(field, true);
-    setFieldValue(field, selectedDiagnoses);
+    setFieldValue(field, [...data]);
   };
 
   const stateOptions = diagnoses.map((diagnosis) => ({
@@ -128,7 +180,7 @@ export const DiagnosisSelection = ({
       <InputLabel>Diagnoses</InputLabel>
       <Select multiple value={selectedDiagnoses} onChange={(e) => onChange(e.target.value as string[])} input={<Input />}>
         {stateOptions.map((option) => (
-          <MenuItem key={option.key} value={option.value}>
+          <MenuItem key={option.key} value={option.value} >
             {option.text}
           </MenuItem>
         ))}

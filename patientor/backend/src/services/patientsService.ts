@@ -30,7 +30,7 @@ const addPatient = (patient: NewPatient): Patient => {
 
 const addPatientEntry = (patientId: string, entry: NewEntry): Entry => {
   const patientIndex = patients.findIndex(patient => patient.id === patientId);
-  if (!patientIndex) {
+  if (patientIndex === -1) {
     throw new Error('Patient not found');
   }
   const id = uuid();

@@ -61,14 +61,6 @@ const PatientInfoPage = () => {
     }
   };
 
-  if (error) {
-    return (
-      <div>
-        <Typography variant="h3">{error}</Typography>
-      </div>
-    );
-  }
-
 
   if (isString(id) && patientDetails[id]) {
     const getGender = (): string => {
