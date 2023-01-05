@@ -8,12 +8,13 @@ import { Work } from "@material-ui/icons";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import { Skeleton } from "@mui/material";
 
 const Border = ({ children }: { children: React.ReactNode }) => <div style={{ borderRadius: '5px', borderStyle: 'solid', padding: '2px 10px 2px 10px', margin: '18px' }}>{children}</div>;
 
 const OccupationalHealthcareEntryComponent = ({ entry }: { entry: OccupationalHealthcareEntry }) => {
   const [{ diagnoses }] = useStateValue();
-  console.log(diagnoses);
+  // console.log(diagnoses);
   return (<Border>
     <p>{entry.date} <Work /> {entry.employerName}</p>
     <p>{entry.description}</p>
@@ -120,7 +121,7 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
     }
   }
 
-  return (<div>Loading entry details</div>);
+  return (<Skeleton variant="rectangular" width={100} height={10} />);
 };
 
 export default EntryDetails;

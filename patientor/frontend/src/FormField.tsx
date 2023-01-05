@@ -66,7 +66,7 @@ export const TypeSelectField = ({ name, label, options }: TypeSelectFieldProps) 
       name={name}
     >
       {options.map(option => (
-        <MenuItem key={option} value={option}>
+        <MenuItem key={option} value={option} >
           {option}
         </MenuItem>
       ))}
@@ -100,15 +100,17 @@ export const HealthCheckRatingField = ({ name, label, options }: HealthCheckRati
 interface TextProps extends FieldProps {
   label: string;
   placeholder: string;
+  required: boolean
 }
 
-export const TextField = ({ field, label, placeholder }: TextProps) => (
+export const TextField = ({ field, label, placeholder, required }: TextProps) => (
   <div style={{ marginBottom: "1em" }}>
     <TextFieldMUI
       fullWidth
       label={label}
       placeholder={placeholder}
       {...field}
+      required={required}
     />
     <Typography variant="subtitle2" style={{ color: "red" }}>
       <ErrorMessage name={field.name} />
