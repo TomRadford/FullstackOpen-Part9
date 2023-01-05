@@ -14,7 +14,6 @@ const PatientInfoPage = () => {
   const [{ patientDetails }, dispatch] = useStateValue();
   const [error, setError] = useState<string | undefined>(undefined);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  console.log(patientDetails);
   useEffect(() => {
     const fetchPatient = async () => {
       if (isString(id)) {
@@ -47,6 +46,12 @@ const PatientInfoPage = () => {
 
   const submitNewEntry = async (values: NewEntry) => {
     try {
+      if (values.type === "OccupationalHealthcare") {
+        if (values.sickLeave?.endDate === "" && values.sickLeave.endDate === "") {
+          values.sickLeave = undefined;
+        }
+      }
+
       const { data: newEntry } = await axios.post<Entry>(`${apiBaseUrl}/patients/${String(id)}/entries`, values);
       dispatch(addPatientEntry({ entry: newEntry, patientId: String(id) }));
       closeModal();

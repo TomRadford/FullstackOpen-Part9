@@ -11,6 +11,8 @@ interface Props {
   onCancel: () => void;
 }
 
+type SubError = { [field: string]: string };
+
 const sharedValues: Omit<BaseEntry, 'id'> = {
   description: "",
   date: "",
@@ -30,12 +32,13 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
           healthCheckRating: 0
         }}
         validateOnChange //To run checks on any change, not only on submit
-        // enableReinitialize //resets on change of initial valies
         onSubmit={onSubmit}
         validate={(values) => {
           const requiredError = "Field is required";
           const incorrectError = "Incorrect format";
-          const errors: { [field: string]: string } = {};
+
+          const errors: { [field: string]: string | SubError } = {};
+
           if (!values.type) {
             errors.type = requiredError;
           }
@@ -68,11 +71,24 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 endDate: values.sickLeave?.endDate ? values.sickLeave?.endDate : ""
               }
             };
-            if (values.sickLeave && !isDate(values.sickLeave.startDate)) {
-              errors["sickLeave.startDate"] = incorrectError;
+            if (!values.employerName) {
+              errors.employerName = requiredError;
             }
-            if (values.sickLeave && !isDate(values.sickLeave.endDate)) {
-              errors["sickLeave.endDate"] = incorrectError;
+            errors.sickLeave = {};
+            if (values.sickLeave?.startDate && !isDate(values.sickLeave.startDate)) {
+              errors.sickLeave.startDate = incorrectError;
+            }
+            if (values.sickLeave?.endDate && !isDate(values.sickLeave.endDate)) {
+              errors.sickLeave.endDate = incorrectError;
+            }
+            if (values.sickLeave?.startDate && !values.sickLeave.endDate) {
+              errors.sickLeave.endDate = requiredError;
+            }
+            if (values.sickLeave?.endDate && !values.sickLeave.startDate) {
+              errors.sickLeave.startDate = requiredError;
+            }
+            if (Object.keys(errors.sickLeave).length === 0) {
+              delete errors.sickLeave;
             }
           }
           if (values.type === "Hospital") {
@@ -85,23 +101,28 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               }
             };
 
+            errors.discharge = {};
+
             if (!values.discharge.date) {
-              errors["discharge.date"] = requiredError;
+              errors.discharge.date = requiredError;
             }
             if (values.discharge.date && !isDate(values.discharge.date)) {
-              errors["discharge.date"] = incorrectError;
-              console.log(errors["discharge.date"]);
+              errors.discharge.date = incorrectError;
+            }
+            if (!values.discharge.criteria) {
+              errors.discharge.criteria = requiredError;
+            }
+            if (Object.keys(errors.discharge).length === 0) {
+              delete errors.discharge;
             }
           }
 
-          console.log(errors);
           return errors;
         }
         }
       >
 
         {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
-          console.log(values);
           return (
             <Form className="form ui">
               <TypeSelectField

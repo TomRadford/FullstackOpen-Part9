@@ -185,7 +185,7 @@ const parseEmployerName = (employerName: unknown): string => {
 
 const parseSickLeave = (sickLeave: unknown): SickLeave => {
   if (!sickLeave || !isSickLeave(sickLeave)) {
-    throw new Error('Incorrect or missing sick leave');
+    throw new Error('Incorrect sick leave');
   }
   return sickLeave;
 };

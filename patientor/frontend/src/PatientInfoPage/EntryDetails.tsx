@@ -14,16 +14,25 @@ const Border = ({ children }: { children: React.ReactNode }) => <div style={{ bo
 
 const OccupationalHealthcareEntryComponent = ({ entry }: { entry: OccupationalHealthcareEntry }) => {
   const [{ diagnoses }] = useStateValue();
-  // console.log(diagnoses);
   return (<Border>
     <p>{entry.date} <Work /> {entry.employerName}</p>
     <p>{entry.description}</p>
     <p>Diagnosed by {entry.specialist}</p>
+    <strong>Diagnoses:</strong>
     <ul>
       {entry.diagnosisCodes?.map(code =>
         <li key={code}>{code} {diagnoses[code].name}</li>
       )}
     </ul>
+    {entry.sickLeave ?
+      <>
+        <strong>Sick Leave:</strong>
+        <ul>
+          <li>Start Date: {entry.sickLeave.startDate}</li>
+          <li>End Date: {entry.sickLeave.endDate}</li>
+        </ul>
+      </>
+      : undefined}
   </Border>
   );
 };
@@ -121,7 +130,7 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {
     }
   }
 
-  return (<Skeleton variant="rectangular" width={100} height={10} />);
+  return (<Skeleton variant="rectangular" width={500} height={100} />);
 };
 
 export default EntryDetails;
